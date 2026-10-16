@@ -1,0 +1,52 @@
+{
+  "network": "GenLayer Studionet (Preview)",
+  "chainId": 61999,
+  "rpc": "https://studio.genlayer.com/api",
+  "explorerBase": "https://explorer-studio.genlayer.com",
+  "deployerAddress": "0xD7Ed7FD1149D922f659782B0ab6A6DA7E989Fb14",
+  "guardArena": {
+    "address": "0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474",
+    "deployTxHash": "0x8c7cf7754804996df19d8e355df3f01b28ac5f64a22655f96a9857afdf25fba0",
+    "sourceFile": "contracts/GuardArena.py",
+    "sourceSha256": "fd163692452d869e1422c63efc09b388269e68175f22bcff3b0783e9ed55f1c4",
+    "sourceBytes": 23731,
+    "elapsed": "10.84",
+    "statusName": "ACCEPTED",
+    "resultName": "MAJORITY_AGREE",
+    "votes": {
+      "0x03D58A4DeF6fDFc032A56374785a5F571D07Bc11": "agree",
+      "0x3E5ee2507cc167C9925Bf10c67D7986581112024": "agree",
+      "0x4EDbE1FC9EAeC7b0EBA849b0C76AE73Eb0ad5C47": "agree",
+      "0x76c25AFC12c75485703cCFfd0083AA6201455B25": "agree",
+      "0xBBb165E4c9d73a1493D363280f7067Cd07891dBE": "agree"
+    },
+    "explorerUrl": "https://explorer-studio.genlayer.com/address/0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474"
+  },
+  "guardGate": {
+    "address": "0xE699C8828F4F054fEe73B251837CE8B373Ba3D02",
+    "deployTxHash": "0xbabc4708a844890d1b25ddc9c263ed956c6e08753772682dcec38c110c206f21",
+    "sourceFile": "contracts/GuardGate.py",
+    "sourceSha256": "4f4ef9bd903f24b145faecfef50a2d78227fa68e2693cc7eb07889cf76c92233",
+    "sourceBytes": 8924,
+    "elapsed": "8.63",
+    "statusName": "ACCEPTED",
+    "resultName": "MAJORITY_AGREE",
+    "votes": {
+      "0x4EDbE1FC9EAeC7b0EBA849b0C76AE73Eb0ad5C47": "agree",
+      "0x5310dcF075E0BD47d29B8ec6581F736C767f54D2": "agree",
+      "0x90402341F0B0e97b23023c0a87de957FB7148E0F": "agree",
+      "0xDB1c35c1f05d885999b8f13e5735307BcC16Be88": "agree",
+      "0xcE1d6bBB36B744536153966B4DD42276f5ADd0F8": "agree"
+    },
+    "explorerUrl": "https://explorer-studio.genlayer.com/address/0xE699C8828F4F054fEe73B251837CE8B373Ba3D02"
+  },
+  "supersededDeployments": [
+    {
+      "contract": "GuardArena",
+      "address": "0x6ebabD1360f65C4F08DaDfe57ae9af2f7C49dEdD",
+      "deployTxHash": "0xee2fcce3cb68115d0774f785ef1a33d808d10cb781d82fe0420c3b4793086c10",
+      "reason": "Superseded initial deployment prior to GuardGate storage schema update"
+    }
+  ],
+  "deployedAt": "2026-10-16T04:40:14.151Z"
+}

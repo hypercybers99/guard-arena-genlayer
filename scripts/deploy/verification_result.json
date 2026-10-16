@@ -1,0 +1,24 @@
+{
+  "guardArena": {
+    "contract": "GuardArena",
+    "deployTxHash": "0x8c7cf7754804996df19d8e355df3f01b28ac5f64a22655f96a9857afdf25fba0",
+    "rpcMethod": "eth_getTransactionByHash",
+    "rpcField": "result.data.contract_code",
+    "localSha256": "fd163692452d869e1422c63efc09b388269e68175f22bcff3b0783e9ed55f1c4",
+    "chainSha256": "fd163692452d869e1422c63efc09b388269e68175f22bcff3b0783e9ed55f1c4",
+    "match": true,
+    "sourceBytesLength": 23731,
+    "verifiedAt": "2026-10-16T04:54:42.942Z"
+  },
+  "guardGate": {
+    "contract": "GuardGate",
+    "deployTxHash": "0xbabc4708a844890d1b25ddc9c263ed956c6e08753772682dcec38c110c206f21",
+    "rpcMethod": "eth_getTransactionByHash",
+    "rpcField": "result.data.contract_code",
+    "localSha256": "4f4ef9bd903f24b145faecfef50a2d78227fa68e2693cc7eb07889cf76c92233",
+    "chainSha256": "4f4ef9bd903f24b145faecfef50a2d78227fa68e2693cc7eb07889cf76c92233",
+    "match": true,
+    "sourceBytesLength": 8924,
+    "verifiedAt": "2026-10-16T04:54:43.273Z"
+  }
+}
