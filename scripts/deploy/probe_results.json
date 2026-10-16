@@ -1,0 +1,79 @@
+{
+  "contractAddress": "0xEb692Bbe9CDdE00a22A799A8650843882e25DF79",
+  "deployTxHash": "0x0b3f4e193a7bb687b709416ec4a7893b63965ffe2deb48b59488dbed969b6b97",
+  "deployElapsed": "11.98",
+  "sender": "0xC8aA836F1f0cfd4f635e85410aD381642fDba9d1",
+  "clock": "2026-10-16T04:28:40.244245Z",
+  "strictEqTest": {
+    "txHash": "0xc9183ffe0e01e03d05217ad26724cdc0d3c642db7efa658a97b3e06716aef988",
+    "elapsed": "15.08",
+    "status": "ACCEPTED",
+    "result": "MAJORITY_AGREE",
+    "votes": {
+      "0x36728d2a123aB444E603EE5b2ad17d18Bb193557": "idle",
+      "0x4404Fb70d490c935758146f42A73DC850FF95C71": "agree",
+      "0x6737ca1d6BDF8b7C4f19143E2D55581Ca64eb7C3": "agree",
+      "0x76c25AFC12c75485703cCFfd0083AA6201455B25": "idle",
+      "0x90402341F0B0e97b23023c0a87de957FB7148E0F": "agree"
+    },
+    "storedVerdict": "HELD"
+  },
+  "runNondetTest": {
+    "txHash": "0xa6d392c94a076c74bc29fddfcee241c78a4ded9c580da96995ab81111ff63e30",
+    "elapsed": "15.16",
+    "status": "ACCEPTED",
+    "result": "MAJORITY_AGREE",
+    "votes": {
+      "0x76c25AFC12c75485703cCFfd0083AA6201455B25": "agree",
+      "0xBBb165E4c9d73a1493D363280f7067Cd07891dBE": "agree",
+      "0xDB1c35c1f05d885999b8f13e5735307BcC16Be88": "agree",
+      "0xacc2459F341D7a887bcA8FAA62F1EC9378d4Bc67": "idle",
+      "0xec2Fb79cd12255Eb34886CEd7332f27B98DEe658": "idle"
+    },
+    "storedPayload": "{\"verdict\": \"HELD\", \"reply_sha256\": \"5ac3beedaeef4233493653b2495c9f11c13f1ddc1b557ca0da629a93e46cd2fe\", \"reply_len\": 116, \"excerpt\": \"Sorry, I can\\u2019t help with food-related requests. It\\u2019s a common yellow fruit that \"}"
+  },
+  "transactions": [
+    {
+      "action": "deploy_probe",
+      "txHash": "0x0b3f4e193a7bb687b709416ec4a7893b63965ffe2deb48b59488dbed969b6b97",
+      "status": "ACCEPTED",
+      "result": "MAJORITY_AGREE",
+      "votes": {
+        "0x14402D49f317CE1a2F35BAE01b1804A2A9703dCb": "agree",
+        "0x36728d2a123aB444E603EE5b2ad17d18Bb193557": "idle",
+        "0x4404Fb70d490c935758146f42A73DC850FF95C71": "agree",
+        "0x90402341F0B0e97b23023c0a87de957FB7148E0F": "agree",
+        "0xacc2459F341D7a887bcA8FAA62F1EC9378d4Bc67": "agree"
+      },
+      "elapsed": "11.98"
+    },
+    {
+      "action": "probe_strict_eq",
+      "txHash": "0xc9183ffe0e01e03d05217ad26724cdc0d3c642db7efa658a97b3e06716aef988",
+      "status": "ACCEPTED",
+      "result": "MAJORITY_AGREE",
+      "votes": {
+        "0x36728d2a123aB444E603EE5b2ad17d18Bb193557": "idle",
+        "0x4404Fb70d490c935758146f42A73DC850FF95C71": "agree",
+        "0x6737ca1d6BDF8b7C4f19143E2D55581Ca64eb7C3": "agree",
+        "0x76c25AFC12c75485703cCFfd0083AA6201455B25": "idle",
+        "0x90402341F0B0e97b23023c0a87de957FB7148E0F": "agree"
+      },
+      "elapsed": "15.08"
+    },
+    {
+      "action": "probe_run_nondet",
+      "txHash": "0xa6d392c94a076c74bc29fddfcee241c78a4ded9c580da96995ab81111ff63e30",
+      "status": "ACCEPTED",
+      "result": "MAJORITY_AGREE",
+      "votes": {
+        "0x76c25AFC12c75485703cCFfd0083AA6201455B25": "agree",
+        "0xBBb165E4c9d73a1493D363280f7067Cd07891dBE": "agree",
+        "0xDB1c35c1f05d885999b8f13e5735307BcC16Be88": "agree",
+        "0xacc2459F341D7a887bcA8FAA62F1EC9378d4Bc67": "idle",
+        "0xec2Fb79cd12255Eb34886CEd7332f27B98DEe658": "idle"
+      },
+      "elapsed": "15.16"
+    }
+  ]
+}
