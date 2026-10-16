@@ -1,0 +1,28 @@
+{
+  "name": "guard-arena-genlayer",
+  "version": "1.0.0",
+  "description": "BreakTheGuard: Robustness arena for language model guards on GenLayer Studionet (Preview)",
+  "type": "commonjs",
+  "scripts": {
+    "test": "python -m unittest discover tests",
+    "scan:ascii": "python scripts/scan_ascii.py",
+    "scan:banned": "python scripts/scan_banned_words.py",
+    "scan:secrets": "python scripts/scan_secrets.py",
+    "verify:source": "node scripts/verify_source.js",
+    "check:evidence": "python scripts/check_evidence_consistency.py",
+    "check": "npm run test && npm run scan:ascii && npm run scan:banned && npm run scan:secrets && npm run verify:source && npm run check:evidence"
+  },
+  "keywords": [
+    "genlayer",
+    "intelligent-contracts",
+    "guard-arena",
+    "prompt-injection",
+    "language-models",
+    "consensus"
+  ],
+  "author": "Hyper (huzyow155)",
+  "license": "MIT",
+  "dependencies": {
+    "genlayer-js": "^1.1.8"
+  }
+}
