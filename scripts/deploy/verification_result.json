@@ -8,7 +8,7 @@
     "chainSha256": "fd163692452d869e1422c63efc09b388269e68175f22bcff3b0783e9ed55f1c4",
     "match": true,
     "sourceBytesLength": 23731,
-    "verifiedAt": "2026-10-16T04:54:42.942Z"
+    "verifiedAt": "2026-10-17T02:21:28.167Z"
   },
   "guardGate": {
     "contract": "GuardGate",
@@ -19,6 +19,6 @@
     "chainSha256": "4f4ef9bd903f24b145faecfef50a2d78227fa68e2693cc7eb07889cf76c92233",
     "match": true,
     "sourceBytesLength": 8924,
-    "verifiedAt": "2026-10-16T04:54:43.273Z"
+    "verifiedAt": "2026-10-17T02:21:28.501Z"
   }
 }

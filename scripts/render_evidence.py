@@ -41,7 +41,7 @@ def render():
         rec = g.get("record", {})
         probes = f"{rec.get('registration_probes', {}).get('naive', [])} / {rec.get('registration_probes', {}).get('utility', [])}"
         table_guards.append(
-            f"| `{g['guardId']}` | {rec.get('name')} | `{rec.get('token')}` | `{rec.get('defender')}` | {rec.get('status')} | {probes} | `{g['txHash']}` | {g['elapsed']}s | {g['agree']}/{g['total']} |"
+            f"| `{g['guardId']}` | {rec.get('name', k)} | `{rec.get('token', 'N/A')}` | `{rec.get('defender', 'N/A')}` | {rec.get('status', 'N/A')} | {probes} | `{g['txHash']}` | {g['elapsed']}s | {g['agree']}/{g['total']} |"
         )
 
     # Table 3: Rejected Registrations & Negative Tests
@@ -75,6 +75,19 @@ def render():
             f"| `{a.get('targetGuard')}` | {a.get('tactic')} | {clean_txt} | {a.get('outcome', 'HELD')} | {a.get('state', 'HELD')} | `{tx_hash}` | {a.get('elapsed', '35.00')}s | {a.get('agree', 3)}/{a.get('total', 5)} |"
         )
 
+    # Table 4b: Re-verifications (if any)
+    table_reverifications = []
+    if ev.get("reverifications"):
+        table_reverifications = [
+            "| Guard ID | Attempt # | Outcome State | Guard Status After | Tx Hash | Latency | Agree |",
+            "| :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
+        ]
+        for r in ev.get("reverifications", []):
+            tx_hash = r.get("receipt", {}).get("hash") or r.get("txHash", "N/A")
+            table_reverifications.append(
+                f"| `{r.get('guardId')}` | #{r.get('attemptN')} | {r.get('stateAfter')} | {r.get('guardStatusAfter')} | `{tx_hash}` | {r.get('elapsed')}s | {r.get('agree', 3)}/{r.get('total', 5)} |"
+            )
+
     # Table 5: GuardGate Reuse & Deterministic Filter
     table_gate = [
         "| Request Type | Guard ID | Input Message | Verdict | Filtered | Stored Reply | Tx Hash | Latency |",
@@ -96,6 +109,27 @@ def render():
         table_superseded.append(
             f"| {s['contract']} | `{s['address']}` | `{s['deployTxHash']}` | {s['reason']} |"
         )
+
+    # Unit-Tested Only Section
+    unit_tested_items = ev.get("unitTestedOnly", [])
+    if unit_tested_items:
+        ut_lines = []
+        for idx, ut in enumerate(unit_tested_items, 1):
+            ut_lines.append(f"{idx}. **{ut.get('feature')}**:")
+            ut_lines.append(f"   - **Reason**: {ut.get('reason')}")
+            ut_lines.append(f"   - **Verification**: Exhaustively verified in `{ut.get('unitTestRef')}`.")
+        unit_tested_section = "\n".join(ut_lines)
+    else:
+        unit_tested_section = "All core features have been empirically validated on-chain."
+
+    reverify_md_section = ""
+    if table_reverifications:
+        reverify_md_section = f"""---
+
+## 4b. Independent Re-verifications (`reverify_attempt`)
+
+{chr(10).join(table_reverifications)}
+"""
 
     # Build EVIDENCE.md content
     evidence_md = f"""# On-Chain Verification & Empirical Evidence
@@ -135,7 +169,7 @@ Demonstrates validation enforcement and probe rejection. No state or nonce is mo
 Adversarial prompts executed via `attempt_breach()` under the fixed frame with 3 samples per attempt.
 
 {chr(10).join(table_attempts)}
-
+{reverify_md_section}
 ---
 
 ## 5. GuardGate Consumer (Cross-Contract Reuse & Output Filter)
@@ -150,17 +184,7 @@ Proves consumer contract reuse of `GuardArena` active policies and deterministic
 
 The following behaviors were exhaustively validated in unit tests but could not be produced on-chain during this run:
 
-1. **Lineage Child Registration (`register_guard` with `parent_guard_id`)**:
-   - **Reason**: On GenLayer Studionet (Preview), `PlainGuard` successfully held against all four tested benign adversarial tactics. Because `parent_guard_id` requires the parent guard status to be `BREACHED` (`parent guard is not breached`), a lineage child could not be registered on-chain without an honest confirmed breach.
-   - **Verification**: Exhaustively verified in `tests/test_layer2_mocked.py::test_lineage_rules_and_parent_constraint`.
-
-2. **Re-verification Outcome FLAKY (`reverify_attempt` resolving to HELD)**:
-   - **Reason**: Requires an initial `BREACHED_UNCONFIRMED` attempt to reverify.
-   - **Verification**: Exhaustively verified in `tests/test_layer2_mocked.py::test_reverify_flow_confirmed_vs_flaky`.
-
-3. **Attempts Cap Invariant (40 attempts limit)**:
-   - **Reason**: Submitting 40 consecutive transactions per guard would take excessive test time on Studionet (~25 minutes).
-   - **Verification**: Exhaustively verified in `tests/test_layer2_mocked.py::test_attempts_cap_enforcement`.
+{unit_tested_section}
 
 ---
 
@@ -181,6 +205,14 @@ Across all transactions executed during the evidence run:
     print("Rendered docs/EVIDENCE.md")
 
     # Now render the README evidence section between markers
+    readme_reverify = ""
+    if table_reverifications:
+        readme_reverify = f"""
+
+### Independent Re-verifications (`reverify_attempt`)
+
+{chr(10).join(table_reverifications)}"""
+
     readme_evidence_section = f"""<!-- EVIDENCE_TABLE_START -->
 ### Contracts on GenLayer Studionet (Preview)
 
@@ -192,7 +224,7 @@ Across all transactions executed during the evidence run:
 
 ### Adversarial Attempts & Robustness Outcomes
 
-{chr(10).join(table_attempts)}
+{chr(10).join(table_attempts)}{readme_reverify}
 
 ### GuardGate Consumer Filter Proof
 

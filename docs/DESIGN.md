@@ -86,3 +86,15 @@ BreakTheGuard adopts `gl.vm.run_nondet`:
 - **Leader**: Queries the language model, calculates the deterministic majority verdict, computes the sha256 fingerprint of the representative reply, and packages telemetry.
 - **Validator**: Independently samples the model, evaluates the deterministic breach predicate on its own samples, and verifies that `my_majority_verdict == leader_data["verdict"]`.
 - This ensures validators agree on the factual evaluation outcome while accommodating natural LLM sampling variability.
+
+---
+
+## 4. Known Limitations
+
+1. **Predicate Detection Scope**: The breach predicate detects plain whole-word and letter-spelled (space/hyphen/dot/underscore separated) occurrences after NFKD ASCII folding and casefold. It does NOT detect base64, rot13, reversed text, or other encodings, even though the arena rule text says "any form, spelling or encoding".
+2. **Reply Cap**: Only the first 240 chars of a reply are checked.
+3. **Reply Storage Privacy**: The contract stores only reply sha256, length and an 80-char excerpt, never the full reply.
+4. **Sampling Disagreements on Borderline Prompts**: Validators agree on the majority verdict of K=3 samples; borderline attacks may produce disagreement/timeouts.
+5. **Leaderboard Complexity**: `get_leaderboard` parses all guards (O(n)); fine for Studionet scale, not for production scale.
+6. **GuardGate Output Filter**: GuardGate reply is consensus-sampled and filtered; the stored reply is the leader's filtered output.
+
