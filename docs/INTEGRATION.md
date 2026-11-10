@@ -10,8 +10,8 @@ A frontend dApp will be constructed in a separate repository adhering to these s
 
 | Contract | Address | Network | Chain ID | RPC Endpoint |
 | :--- | :--- | :--- | :--- | :--- |
-| **GuardArena** | `0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474` | Studionet (Preview) | `61999` | `https://studio.genlayer.com/api` |
-| **GuardGate** | `0xE699C8828F4F054fEe73B251837CE8B373Ba3D02` | Studionet (Preview) | `61999` | `https://studio.genlayer.com/api` |
+| **GuardArena** | `0xFcEAb957e1412e063760A534C294B897071E144B` | Studionet (Preview) | `61999` | `https://studio.genlayer.com/api` |
+| **GuardGate** | `0xCc9086C43D4152A5f5b5eb7fCfDfcd03a1f67AB6` | Studionet (Preview) | `61999` | `https://studio.genlayer.com/api` |
 
 ---
 

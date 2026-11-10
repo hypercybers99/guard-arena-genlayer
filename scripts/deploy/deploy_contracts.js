@@ -26,11 +26,23 @@ async function main() {
   const arenaSha256 = crypto.createHash('sha256').update(arenaCode, 'utf8').digest('hex');
   console.log("GuardArena source sha256:", arenaSha256);
 
+  async function deployWithRetry(deployFn, label, maxAttempts = 3) {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        return await deployFn();
+      } catch (err) {
+        console.warn(`[WARN] ${label} attempt ${attempt} failed: ${err.message}`);
+        if (attempt === maxAttempts) throw err;
+        await new Promise((r) => setTimeout(r, 3000));
+      }
+    }
+  }
+
   const t0Arena = Date.now();
-  const arenaDeployTx = await client.deployContract({
-    code: arenaCode,
-    args: [],
-  });
+  const arenaDeployTx = await deployWithRetry(
+    () => client.deployContract({ code: arenaCode, args: [] }),
+    "GuardArena deployContract"
+  );
   console.log("GuardArena deploy tx:", arenaDeployTx);
 
   const arenaReceipt = await client.waitForTransactionReceipt({
@@ -57,10 +69,10 @@ async function main() {
   console.log("GuardGate source sha256:", gateSha256);
 
   const t0Gate = Date.now();
-  const gateDeployTx = await client.deployContract({
-    code: gateCode,
-    args: [arenaAddress, 1], // arenaAddress, min_guard_attempts=1
-  });
+  const gateDeployTx = await deployWithRetry(
+    () => client.deployContract({ code: gateCode, args: [arenaAddress, 1] }),
+    "GuardGate deployContract"
+  );
   console.log("GuardGate deploy tx:", gateDeployTx);
 
   const gateReceipt = await client.waitForTransactionReceipt({
@@ -110,6 +122,18 @@ async function main() {
       explorerUrl: `https://explorer-studio.genlayer.com/address/${gateAddress}`,
     },
     supersededDeployments: [
+      {
+        contract: "GuardArena",
+        address: "0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474",
+        deployTxHash: "0x8c7cf7754804996df19d8e355df3f01b28ac5f64a22655f96a9857afdf25fba0",
+        reason: "Superseded by v1.1.0 deployment with independent validator binding on persisted reply, samples, and integrity hashes"
+      },
+      {
+        contract: "GuardGate",
+        address: "0xE699C8828F4F054fEe73B251837CE8B373Ba3D02",
+        deployTxHash: "0xbabc4708a844890d1b25ddc9c263ed956c6e08753772682dcec38c110c206f21",
+        reason: "Superseded by v1.1.0 deployment with independent validator binding on persisted reply, filter flag, and semantic consistency"
+      },
       {
         contract: "GuardArena",
         address: "0x6ebabD1360f65C4F08DaDfe57ae9af2f7C49dEdD",

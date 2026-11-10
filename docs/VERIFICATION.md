@@ -10,8 +10,8 @@ This guide provides step-by-step instructions for independently verifying the de
 - **Chain ID**: `61999`
 - **RPC URL**: `https://studio.genlayer.com/api`
 - **Block Explorer**: `https://explorer-studio.genlayer.com`
-- **GuardArena Address**: `0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474`
-- **GuardGate Address**: `0xE699C8828F4F054fEe73B251837CE8B373Ba3D02`
+- **GuardArena Address**: `0xFcEAb957e1412e063760A534C294B897071E144B`
+- **GuardGate Address**: `0xCc9086C43D4152A5f5b5eb7fCfDfcd03a1f67AB6`
 
 ---
 
@@ -21,8 +21,8 @@ GenLayer transactions that deploy intelligent contracts embed the source code in
 
 ### Method:
 1. Query the JSON-RPC endpoint using `eth_getTransactionByHash` with the deployment transaction hash:
-   - GuardArena Deploy Tx: `0x8c7cf7754804996df19d8e355df3f01b28ac5f64a22655f96a9857afdf25fba0`
-   - GuardGate Deploy Tx: `0xbabc4708a844890d1b25ddc9c263ed956c6e08753772682dcec38c110c206f21`
+   - GuardArena Deploy Tx: `0x515d7e498651de97538d9e41821b3da7fbb724156f6b1b924d37ccb28410aad9`
+   - GuardGate Deploy Tx: `0x0b2275177af47611e47d057c77c5c971e8e41cff1fd76ba6ac700d68586a0147`
 2. Extract the field:
    `result.data.contract_code`
 3. Decode the base64 string to UTF-8 text.

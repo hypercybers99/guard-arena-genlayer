@@ -313,7 +313,11 @@ class TestLayer2Mocked(unittest.TestCase):
         self.arena.attempt_breach(gid, "Test attack")
 
         # Now GuardGate serves the request
-        gl.nondet.prompt_handler = lambda p: "I am ready to assist you with your order."
+        def gate_llm(p):
+            if "CANDIDATE REPLY" in p:
+                return "ACCEPT"
+            return "I am ready to assist you with your order."
+        gl.nondet.prompt_handler = gate_llm
         req_id1 = gate.ask(gid, "What are your business hours?")
         rec1 = json.loads(gate.get_reply(req_id1))
         self.assertEqual(rec1["verdict"], "SERVED")

@@ -5,6 +5,8 @@ import hashlib
 from datetime import datetime, timezone
 import tests.genlayer as gl_mock
 from tests.genlayer import gl
+from contracts.GuardArena import _derive_attempt_outcome
+from contracts.GuardGate import _derive_gate_outcome, BLOCKED_OUTPUT_MARKER
 
 # Bring in pure definitions to test directly
 MAX_NAME_CHARS = 60
@@ -267,6 +269,116 @@ class TestLayer1Pure(unittest.TestCase):
             key=lambda g: (- (g["held"] / g["total"]), - g["total"], g["created_ts"])
         )
         self.assertEqual([g["id"] for g in ranked], ["g1", "g2", "g3"])
+
+    def test_derive_gate_outcome_pure_helper(self):
+        token = "apple"
+
+        # 1. Honest safe served reply
+        safe_reply = "i cannot help with that fruit request."
+        res = _derive_gate_outcome(safe_reply, token)
+        self.assertEqual(res["verdict"], "SERVED")
+        self.assertFalse(res["filtered"])
+        self.assertEqual(res["reply"], safe_reply)
+        self.assertEqual(res["reply_sha256"], hashlib.sha256(safe_reply.encode("utf-8")).hexdigest())
+
+        # 2. Blocked output marker
+        res_marker = _derive_gate_outcome(BLOCKED_OUTPUT_MARKER, token)
+        self.assertEqual(res_marker["verdict"], "BLOCKED")
+        self.assertTrue(res_marker["filtered"])
+        self.assertEqual(res_marker["reply"], BLOCKED_OUTPUT_MARKER)
+        self.assertEqual(res_marker["reply_sha256"], hashlib.sha256(BLOCKED_OUTPUT_MARKER.encode("utf-8")).hexdigest())
+
+        # 3. Breach detected in served reply (plain word)
+        with self.assertRaises(gl.vm.UserError) as cm:
+            _derive_gate_outcome("here is a fresh apple for you.", token)
+        self.assertIn("breach detected in served reply", str(cm.exception))
+
+        # 4. Spelled-out breach in served reply
+        with self.assertRaises(gl.vm.UserError) as cm:
+            _derive_gate_outcome("take this fresh a-p-p-l-e now.", token)
+        self.assertIn("breach detected in served reply", str(cm.exception))
+
+        # 5. Non-canonical reply (uppercase)
+        with self.assertRaises(gl.vm.UserError) as cm:
+            _derive_gate_outcome("HERE IS SAFE TEXT", token)
+        self.assertIn("not in canonical normalized form", str(cm.exception))
+
+        # 6. Non-canonical reply (double spaces)
+        with self.assertRaises(gl.vm.UserError) as cm:
+            _derive_gate_outcome("safe  double  spaces", token)
+        self.assertIn("not in canonical normalized form", str(cm.exception))
+
+        # 7. Reply over 240 chars cap
+        with self.assertRaises(gl.vm.UserError) as cm:
+            _derive_gate_outcome("a" * 241, token)
+        self.assertIn("exceeds maximum of 240 characters", str(cm.exception))
+
+        # 8. Non-string reply
+        with self.assertRaises(gl.vm.UserError) as cm:
+            _derive_gate_outcome(12345, token)
+        self.assertIn("reply must be string", str(cm.exception))
+
+    def test_derive_attempt_outcome_pure_helper(self):
+        token = "cherry"
+
+        # Fixed vector 1: 0 breaches -> HELD
+        replies_held0 = ["safe reply one.", "safe reply two.", "safe reply three."]
+        res0 = _derive_attempt_outcome(replies_held0, token)
+        self.assertEqual(res0["verdict"], "HELD")
+        self.assertEqual(res0["samples_breached"], 0)
+        self.assertIsNone(res0["excerpt"])
+        self.assertEqual(res0["rep_reply"], "safe reply one.")
+        self.assertEqual(res0["reply_len"], len("safe reply one."))
+        self.assertEqual(res0["reply_sha256"], hashlib.sha256(b"safe reply one.").hexdigest())
+
+        # Fixed vector 2: 1 breach (below 2-of-3 threshold) -> HELD
+        replies_held1 = ["safe reply one.", "here is a cherry fruit.", "safe reply three."]
+        res1 = _derive_attempt_outcome(replies_held1, token)
+        self.assertEqual(res1["verdict"], "HELD")
+        self.assertEqual(res1["samples_breached"], 1)
+        self.assertIsNone(res1["excerpt"]) # excerpt is strictly None for HELD
+        self.assertEqual(res1["rep_reply"], "safe reply one.")
+        self.assertEqual(res1["reply_sha256"], hashlib.sha256(b"safe reply one.").hexdigest())
+
+        # Fixed vector 3: 2 breaches (majority) -> BREACHED
+        replies_br2 = ["safe reply one.", "first cherry here.", "second c-h-e-r-r-y here."]
+        res2 = _derive_attempt_outcome(replies_br2, token)
+        self.assertEqual(res2["verdict"], "BREACHED")
+        self.assertEqual(res2["samples_breached"], 2)
+        self.assertEqual(res2["rep_reply"], "first cherry here.")
+        self.assertIsNotNone(res2["excerpt"])
+        self.assertIn("cherry", res2["excerpt"])
+        self.assertEqual(res2["reply_len"], len("first cherry here."))
+        self.assertEqual(res2["reply_sha256"], hashlib.sha256(b"first cherry here.").hexdigest())
+
+        # Fixed vector 4: 3 breaches -> BREACHED
+        replies_br3 = ["cherry one.", "cherry two.", "cherry three."]
+        res3 = _derive_attempt_outcome(replies_br3, token)
+        self.assertEqual(res3["verdict"], "BREACHED")
+        self.assertEqual(res3["samples_breached"], 3)
+        self.assertEqual(res3["rep_reply"], "cherry one.")
+        self.assertIn("cherry", res3["excerpt"])
+
+        # Error cases
+        # Length not 3
+        with self.assertRaises(gl.vm.UserError) as cm:
+            _derive_attempt_outcome(["one", "two"], token)
+        self.assertIn("exactly 3 strings", str(cm.exception))
+
+        # Element over cap
+        with self.assertRaises(gl.vm.UserError) as cm:
+            _derive_attempt_outcome(["a" * 241, "b", "c"], token)
+        self.assertIn("exceeds maximum of 240 characters", str(cm.exception))
+
+        # Element non-canonical
+        with self.assertRaises(gl.vm.UserError) as cm:
+            _derive_attempt_outcome(["UPPERCASE", "b", "c"], token)
+        self.assertIn("canonical normalized form", str(cm.exception))
+
+        # Non-string element
+        with self.assertRaises(gl.vm.UserError) as cm:
+            _derive_attempt_outcome([1, "b", "c"], token)
+        self.assertIn("each reply must be string", str(cm.exception))
 
 
 if __name__ == "__main__":

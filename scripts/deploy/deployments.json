@@ -3,44 +3,56 @@
   "chainId": 61999,
   "rpc": "https://studio.genlayer.com/api",
   "explorerBase": "https://explorer-studio.genlayer.com",
-  "deployerAddress": "0xD7Ed7FD1149D922f659782B0ab6A6DA7E989Fb14",
+  "deployerAddress": "0x7cB8E548C8a5f53E109304be3849a6987913FA43",
   "guardArena": {
-    "address": "0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474",
-    "deployTxHash": "0x8c7cf7754804996df19d8e355df3f01b28ac5f64a22655f96a9857afdf25fba0",
+    "address": "0xFcEAb957e1412e063760A534C294B897071E144B",
+    "deployTxHash": "0x515d7e498651de97538d9e41821b3da7fbb724156f6b1b924d37ccb28410aad9",
     "sourceFile": "contracts/GuardArena.py",
-    "sourceSha256": "fd163692452d869e1422c63efc09b388269e68175f22bcff3b0783e9ed55f1c4",
-    "sourceBytes": 23731,
-    "elapsed": "10.84",
+    "sourceSha256": "a93010bb5a3371b8a2fddcc1b8c12d7a459c9572abe033ef8e265ed6c9872b41",
+    "sourceBytes": 26249,
+    "elapsed": "7.83",
     "statusName": "ACCEPTED",
     "resultName": "MAJORITY_AGREE",
     "votes": {
-      "0x03D58A4DeF6fDFc032A56374785a5F571D07Bc11": "agree",
-      "0x3E5ee2507cc167C9925Bf10c67D7986581112024": "agree",
-      "0x4EDbE1FC9EAeC7b0EBA849b0C76AE73Eb0ad5C47": "agree",
-      "0x76c25AFC12c75485703cCFfd0083AA6201455B25": "agree",
-      "0xBBb165E4c9d73a1493D363280f7067Cd07891dBE": "agree"
+      "0x0cf3809a31B0c7E0742d126451aDE1977e3748D2": "idle",
+      "0x2bB088e4E6Fd1faBBd23d93F38D01f28a954A49c": "agree",
+      "0x37CD8552B86b2B662eCfb69C4A1253dBE41EB4C1": "agree",
+      "0x722474B013fA39E5aA8785f927dCeB0e3F89815B": "idle",
+      "0xc675c2B7E1F066B7c1D2fe54EF7B76C91CdFa5F4": "agree"
     },
-    "explorerUrl": "https://explorer-studio.genlayer.com/address/0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474"
+    "explorerUrl": "https://explorer-studio.genlayer.com/address/0xFcEAb957e1412e063760A534C294B897071E144B"
   },
   "guardGate": {
-    "address": "0xE699C8828F4F054fEe73B251837CE8B373Ba3D02",
-    "deployTxHash": "0xbabc4708a844890d1b25ddc9c263ed956c6e08753772682dcec38c110c206f21",
+    "address": "0xCc9086C43D4152A5f5b5eb7fCfDfcd03a1f67AB6",
+    "deployTxHash": "0x0b2275177af47611e47d057c77c5c971e8e41cff1fd76ba6ac700d68586a0147",
     "sourceFile": "contracts/GuardGate.py",
-    "sourceSha256": "4f4ef9bd903f24b145faecfef50a2d78227fa68e2693cc7eb07889cf76c92233",
-    "sourceBytes": 8924,
-    "elapsed": "8.63",
+    "sourceSha256": "6ebf7eb0606c00a95ece12123035e99bcecd9015c311a76a0ab3d3da7c90c4d2",
+    "sourceBytes": 13234,
+    "elapsed": "5.50",
     "statusName": "ACCEPTED",
     "resultName": "MAJORITY_AGREE",
     "votes": {
-      "0x4EDbE1FC9EAeC7b0EBA849b0C76AE73Eb0ad5C47": "agree",
-      "0x5310dcF075E0BD47d29B8ec6581F736C767f54D2": "agree",
-      "0x90402341F0B0e97b23023c0a87de957FB7148E0F": "agree",
-      "0xDB1c35c1f05d885999b8f13e5735307BcC16Be88": "agree",
-      "0xcE1d6bBB36B744536153966B4DD42276f5ADd0F8": "agree"
+      "0x1Cd67946A11E6410a3DF1b27d35F4a511e93c882": "agree",
+      "0x560FBD37a10bC2B96F118071e922c9106c12Ba1d": "agree",
+      "0x711353514049EAc21213834ADd07eF552aF394E6": "idle",
+      "0x722474B013fA39E5aA8785f927dCeB0e3F89815B": "idle",
+      "0x8ADae333478F9D037c78b0E3E8279DdAAb20a1B3": "agree"
     },
-    "explorerUrl": "https://explorer-studio.genlayer.com/address/0xE699C8828F4F054fEe73B251837CE8B373Ba3D02"
+    "explorerUrl": "https://explorer-studio.genlayer.com/address/0xCc9086C43D4152A5f5b5eb7fCfDfcd03a1f67AB6"
   },
   "supersededDeployments": [
+    {
+      "contract": "GuardArena",
+      "address": "0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474",
+      "deployTxHash": "0x8c7cf7754804996df19d8e355df3f01b28ac5f64a22655f96a9857afdf25fba0",
+      "reason": "Superseded by v1.1.0 deployment with independent validator binding on persisted reply, samples, and integrity hashes"
+    },
+    {
+      "contract": "GuardGate",
+      "address": "0xE699C8828F4F054fEe73B251837CE8B373Ba3D02",
+      "deployTxHash": "0xbabc4708a844890d1b25ddc9c263ed956c6e08753772682dcec38c110c206f21",
+      "reason": "Superseded by v1.1.0 deployment with independent validator binding on persisted reply, filter flag, and semantic consistency"
+    },
     {
       "contract": "GuardArena",
       "address": "0x6ebabD1360f65C4F08DaDfe57ae9af2f7C49dEdD",
@@ -48,5 +60,5 @@
       "reason": "Superseded initial deployment prior to GuardGate storage schema update"
     }
   ],
-  "deployedAt": "2026-10-16T04:40:14.151Z"
+  "deployedAt": "2026-11-10T08:52:03.846Z"
 }
