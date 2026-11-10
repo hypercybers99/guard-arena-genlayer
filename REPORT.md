@@ -9,8 +9,8 @@ This report details the final documentation alignment, probe specification corre
 ### A. Intelligent Contracts Repository (`guard-arena-genlayer`)
 - **Remote URL**: `https://github.com/hypercybers99/guard-arena-genlayer.git`
 - **Previous Head**: `f01e496ceafd8d04b8e2fa56c1eeb160d11a6067` (tag `v1.1.0`)
-- **New Release Head**: `4fdf1995455f4bd9acbcfdc340933616a3078ebf` (tag `v1.1.1`)
-- **Diff Against Previous Head**: `8 files changed, 115 insertions(+), 44 deletions(-)`
+- **New Release Head**: `b9c016484fc4c5b06dccd57527df264341b59a42` (tag `v1.1.1`)
+- **Diff Against Previous Head**: `10 files changed, 503 insertions(+), 44 deletions(-)`
 
 ### B. dApp Application Repository (`guard-arena-app-genlayer`)
 - **Remote URL**: `https://github.com/hypercybers99/guard-arena-app-genlayer.git`
@@ -24,8 +24,8 @@ This report details the final documentation alignment, probe specification corre
 ```text
 19b68109ccdd75b7ac255205fd0fe518d2dd721d	refs/tags/v1.1.0
 f01e496ceafd8d04b8e2fa56c1eeb160d11a6067	refs/tags/v1.1.0^{}
-395ec0867e99e7c679d866f07348fa3231a2fc17	refs/tags/v1.1.1
-4fdf1995455f4bd9acbcfdc340933616a3078ebf	refs/tags/v1.1.1^{}
+0baa7b73fc9ffd25b8ca7ef0dabb73f4ebed5a7e	refs/tags/v1.1.1
+b9c016484fc4c5b06dccd57527df264341b59a42	refs/tags/v1.1.1^{}
 ```
 
 #### Application Repository:
@@ -141,7 +141,7 @@ computing gzip size...
 [2mdist/[22m[35massets/index-Div78nAq.css  [39m[1m[2m 28.82 kB[22m[1m[22m[2m │ gzip:   5.94 kB[22m
 [2mdist/[22m[36massets/ccip-DPyVdc0y.js    [39m[1m[2m  3.04 kB[22m[1m[22m[2m │ gzip:   1.39 kB[22m
 [2mdist/[22m[36massets/index-DspUUVpZ.js   [39m[1m[33m923.35 kB[39m[22m[2m │ gzip: 227.33 kB[22m
-[32m✓ built in 6.95s[39m
+[32m✓ built in 6.65s[39m
 
 > guard-arena-app-genlayer@1.1.0 test
 > vitest run
@@ -149,24 +149,24 @@ computing gzip size...
 
 [1m[46m RUN [49m[22m [36mv3.2.7 [39m[90me:/guard-arena-app-genlayer[39m
 
- [32m✓[39m tests/unit/contractSignatures.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m tests/unit/revertMap.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 14[2mms[22m[39m
- [32m✓[39m tests/unit/predicate.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 9[2mms[22m[39m
- [32m✓[39m tests/unit/txLifecycle.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 13[2mms[22m[39m
- [32m✓[39m tests/unit/predicateParity.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 22[2mms[22m[39m
- [32m✓[39m tests/unit/tokenList.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m tests/unit/contracts.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/contractSignatures.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/unit/predicate.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/unit/revertMap.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/unit/txLifecycle.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/unit/predicateParity.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m tests/unit/tokenList.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/unit/contracts.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
  [32m✓[39m tests/unit/rpcErrorVsEmpty.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
- [32m✓[39m tests/unit/readbackCompletion.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 10050[2mms[22m[39m
-   [33m[2m✓[22m[39m Completion Only After Readback (Mocked Client)[2m > [22maskGuardGate completes write and reads back get_stats and get_reply [33m 2519[2mms[22m[39m
-   [33m[2m✓[22m[39m Completion Only After Readback (Mocked Client)[2m > [22mregisterGuard succeeds upon consensus and allows post-write readback verification [33m 2517[2mms[22m[39m
-   [33m[2m✓[22m[39m Completion Only After Readback (Mocked Client)[2m > [22mattemptBreach succeeds and readback confirms attempt recorded in guard attempts array [33m 2504[2mms[22m[39m
-   [33m[2m✓[22m[39m Completion Only After Readback (Mocked Client)[2m > [22mreverifyAttempt succeeds and readback confirms attempt has non-null reverify object [33m 2506[2mms[22m[39m
+ [32m✓[39m tests/unit/readbackCompletion.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 10041[2mms[22m[39m
+   [33m[2m✓[22m[39m Completion Only After Readback (Mocked Client)[2m > [22maskGuardGate completes write and reads back get_stats and get_reply [33m 2520[2mms[22m[39m
+   [33m[2m✓[22m[39m Completion Only After Readback (Mocked Client)[2m > [22mregisterGuard succeeds upon consensus and allows post-write readback verification [33m 2515[2mms[22m[39m
+   [33m[2m✓[22m[39m Completion Only After Readback (Mocked Client)[2m > [22mattemptBreach succeeds and readback confirms attempt recorded in guard attempts array [33m 2502[2mms[22m[39m
+   [33m[2m✓[22m[39m Completion Only After Readback (Mocked Client)[2m > [22mreverifyAttempt succeeds and readback confirms attempt has non-null reverify object [33m 2502[2mms[22m[39m
 
 [2m Test Files [22m [1m[32m9 passed[39m[22m[90m (9)[39m
 [2m      Tests [22m [1m[32m61 passed[39m[22m[90m (61)[39m
-[2m   Start at [22m 16:52:36
-[2m   Duration [22m 12.20s[2m (transform 836ms, setup 0ms, collect 5.13s, tests 10.14s, environment 3ms, prepare 4.35s)[22m
+[2m   Start at [22m 16:54:17
+[2m   Duration [22m 12.46s[2m (transform 901ms, setup 0ms, collect 4.89s, tests 10.14s, environment 3ms, prepare 4.79s)[22m
 
 
 > guard-arena-app-genlayer@1.1.0 scan:ascii
