@@ -3,17 +3,25 @@ import re
 import sys
 
 BANNED_PATTERNS = [
-    (r'\bcryptographic\s+proof\b', 'cryptographic proof'),
+    (r'\bguarantee(s|d|ing)?\b', 'guarantee(s)'),
+    (r'\bimmutable\b', 'immutable'),
+    (r'\btrustless\b', 'trustless'),
+    (r'\bofficial\b', 'official'),
+    (r'\bverifiable\b', 'verifiable'),
+    (r'\bprevents\b', 'prevents'),
+    (r'\bWCAG\b', 'WCAG'),
+    (r'\bunanimous(ly)?\b', 'unanimous'),
     (r'\btamper-?proof\b', 'tamper-proof'),
     (r'\bbytecode\b', 'bytecode'),
+    (r'\bcryptographic\s+proof\b', 'cryptographic proof'),
+    (r'\bnotary\b', 'notary'),
     (r'\btestnet\b', 'testnet'),
-    (r'\bunanimous(ly)?\b', 'unanimous'),
     (r'\brevolutionary\b', 'revolutionary'),
     (r'\bno\s+one\s+else\b', 'no one else'),
 ]
 
-IGNORE_DIRS = {'.git', 'node_modules', 'dist', '__pycache__'}
-ALLOWED_FILES = {'scan_banned_words.py'}
+IGNORE_DIRS = {'.git', 'node_modules', 'dist', '__pycache__', '.pytest_cache'}
+ALLOWED_FILES = {'scan_banned_words.py', 'scan_banned.mjs'}
 
 def scan():
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,14 +39,14 @@ def scan():
             
             with open(path, 'r', encoding='utf-8', errors='ignore') as fp:
                 for line_idx, line in enumerate(fp, 1):
-                    # Check finalized in docs/markdown (must only be used if referring to literal status_name FINALIZED)
+                    # Check finalized in docs/markdown (must only be used if referring to literal status_name FINALIZED or Raw receipt status)
                     if f.endswith('.md') and re.search(r'\bfinalized\b', line, re.IGNORECASE):
-                        if 'status_name' not in line and 'FINALIZED' not in line:
+                        if not any(k in line for k in ['status_name', 'FINALIZED', 'Raw receipt status', 'latest-final', 'receipt.status']):
                             violations.append((rel_path, line_idx, 'finalized outside status_name', line.strip()))
 
-                    # Check 'live' in docs/markdown (must write Studionet or Preview instead of live testnet/live network)
-                    if f.endswith('.md') and re.search(r'\blive\s+(network|contract|mainnet|testnet|system|mode|environment)\b', line, re.IGNORECASE):
-                        violations.append((rel_path, line_idx, 'live network/system', line.strip()))
+                    # Check 'live' used for the network in docs/markdown
+                    if f.endswith('.md') and re.search(r'\blive\s+(network|contract|mainnet|testnet|system|mode|environment|chain|state)\b', line, re.IGNORECASE):
+                        violations.append((rel_path, line_idx, 'live used for network', line.strip()))
 
                     for pat, name in BANNED_PATTERNS:
                         m = re.search(pat, line, re.IGNORECASE)

@@ -3864,7 +3864,7 @@
         "to_address": "0xFcEAb957e1412e063760A534C294B897071E144B",
         "data": {
           "calldata": {
-            "readable": "{\"args\":[\"NonAsciiGuard\",\"Policy with emoji ✅\",\"apple\",\"\",]\"method\":\"register_guard\"}"
+            "readable": "{\"args\":[\"NonAsciiGuard\",\"Policy with emoji \u2705\",\"apple\",\"\",]\"method\":\"register_guard\"}"
           }
         },
         "status": 5,
@@ -4072,7 +4072,7 @@
                 }
               },
               "calldata": {
-                "readable": "{\"args\":[\"NonAsciiGuard\",\"Policy with emoji ✅\",\"apple\",\"\",]\"method\":\"register_guard\"}"
+                "readable": "{\"args\":[\"NonAsciiGuard\",\"Policy with emoji \u2705\",\"apple\",\"\",]\"method\":\"register_guard\"}"
               },
               "eq_outputs": {},
               "result": {
@@ -4274,7 +4274,7 @@
                 }
               },
               "calldata": {
-                "readable": "{\"args\":[\"NonAsciiGuard\",\"Policy with emoji ✅\",\"apple\",\"\",]\"method\":\"register_guard\"}"
+                "readable": "{\"args\":[\"NonAsciiGuard\",\"Policy with emoji \u2705\",\"apple\",\"\",]\"method\":\"register_guard\"}"
               },
               "result": {
                 "status": "rollback",
@@ -23086,9 +23086,24 @@
   ],
   "unitTestedOnly": [
     {
+      "feature": "Breach Path & Re-verification (attempt_breach -> BREACHED_UNCONFIRMED -> reverify_attempt)",
+      "reason": "Across all on-chain adversarial attempts on Studionet, the model consistently held against the forbidden token. Because no attack produced a majority breach, the breach path and subsequent re-verification flow remain unit-tested only.",
+      "unitTestRef": "tests/test_layer2_mocked.py::test_reverify_flow_confirmed_vs_flaky"
+    },
+    {
       "feature": "Lineage Child Registration after CONFIRMED breach",
       "reason": "Model on Studionet held against all tested benign injection prompts; parent guard remained ACTIVE, so parent-breach precondition correctly prevented on-chain child registration.",
       "unitTestRef": "tests/test_layer2_mocked.py::test_lineage_rules_and_parent_constraint"
+    },
+    {
+      "feature": "Maximum Attempts Cap (40 attempts)",
+      "reason": "Submitting 40 consecutive transactions per guard was omitted to conserve Studionet execution time.",
+      "unitTestRef": "tests/test_layer2_mocked.py::test_attempts_cap_enforcement"
+    },
+    {
+      "feature": "GuardGate BLOCKED Path (Deterministic Output Filter)",
+      "reason": "The BLOCKED path of GuardGate (output filter replaces the reply with the marker) was not produced on-chain; it is covered by unit tests only. Both on-chain GuardGate transactions exercised the SERVED path. The on-chain semantic check (ACCEPT/REJECT) is model judgment and advisory, and validators can still disagree.",
+      "unitTestRef": "tests/test_layer2_mocked.py::test_guard_gate_consumer_behavior"
     }
   ],
   "allTransactions": [
@@ -29384,7 +29399,7 @@
         "to_address": "0xFcEAb957e1412e063760A534C294B897071E144B",
         "data": {
           "calldata": {
-            "readable": "{\"args\":[\"NonAsciiGuard\",\"Policy with emoji ✅\",\"apple\",\"\",]\"method\":\"register_guard\"}"
+            "readable": "{\"args\":[\"NonAsciiGuard\",\"Policy with emoji \u2705\",\"apple\",\"\",]\"method\":\"register_guard\"}"
           }
         },
         "status": 5,
@@ -29592,7 +29607,7 @@
                 }
               },
               "calldata": {
-                "readable": "{\"args\":[\"NonAsciiGuard\",\"Policy with emoji ✅\",\"apple\",\"\",]\"method\":\"register_guard\"}"
+                "readable": "{\"args\":[\"NonAsciiGuard\",\"Policy with emoji \u2705\",\"apple\",\"\",]\"method\":\"register_guard\"}"
               },
               "eq_outputs": {},
               "result": {
@@ -29794,7 +29809,7 @@
                 }
               },
               "calldata": {
-                "readable": "{\"args\":[\"NonAsciiGuard\",\"Policy with emoji ✅\",\"apple\",\"\",]\"method\":\"register_guard\"}"
+                "readable": "{\"args\":[\"NonAsciiGuard\",\"Policy with emoji \u2705\",\"apple\",\"\",]\"method\":\"register_guard\"}"
               },
               "result": {
                 "status": "rollback",

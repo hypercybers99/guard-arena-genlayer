@@ -21,7 +21,7 @@ Adversarial testing of language model guardrails has gained significant traction
 - **Evaluation Mechanism**: Employs language models (LLM-as-a-judge) to evaluate whether the target code was leaked.
 - **Differences from BreakTheGuard**:
   - In Tensor Trust, using an LLM as the evaluator opens recursive prompt injection vulnerabilities against the judge. BreakTheGuard eliminates this by using a deterministic Python predicate.
-  - Tensor Trust operates off-chain without immutable consensus records or economic finality.
+  - Tensor Trust operates off-chain without permanent consensus records or economic finality.
 
 ### C. JailbreakBench & PromptBench
 - **Model**: Academic offline benchmark datasets (Chao et al., 2024; Zhu et al., 2023) evaluating LLM resilience against standardized adversarial prompts.

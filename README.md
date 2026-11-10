@@ -8,14 +8,16 @@ In BreakTheGuard, defenders deploy language model hardening policies ("guards") 
 
 ## Architecture & Novelty Highlights
 
-| Mechanism | Description | Integrity Guarantee |
+| Mechanism | Description | Mechanism Objective |
 | :--- | :--- | :--- |
 | **Deterministic Predicate Oracle** | Breach verdicts are computed by deterministic Python code, never by an LLM-as-a-judge. | Immune to recursive prompt injection against the judge. |
 | **Majority-of-Samples Consensus** | Each attempt samples the model $K=3$ times. Canonical consensus value is the categorical enum (`HELD` or `BREACHED`). | Eliminates validator disagreements from non-deterministic prose variations. |
 | **Reproducibility Requirement** | A breach attempt starts as `BREACHED_UNCONFIRMED`. It requires an independent reproduction via `reverify_attempt` to become `CONFIRMED`. | Flaky one-off model hallucinations do not compromise guard status. |
-| **Utility & Baseline Probes** | At registration, guards must hold against 3 naive injection probes and pass 2 utility probes (e.g. France capital, basic arithmetic). | Rejects trivial refuse-everything guards and brittle guards. |
-| **Lineage & Evolution** | Defenders can register patched guards specifying a `parent_guard_id` strictly after the parent is confirmed breached. | Records verifiable evolution of defensive techniques over time. |
+| **Utility & Baseline Probes** | At registration, guards must hold against 3 naive injection probes and pass 2 utility queries (France capital, 2 plus 3). The utility probe checks that the reply is non-empty, free of the token and not a refusal by keyword; it does not check factual correctness. Validators require exact list-equality between leader and validator probe results. | Rejects trivial refuse-everything guards and brittle guards. |
+| **Lineage & Evolution** | Defenders can register patched guards specifying a `parent_guard_id` strictly after the parent is confirmed breached. | Records on-chain evolution of defensive techniques over time. |
 | **GuardGate Consumer** | Demonstrates cross-contract reuse by serving requests under active guards with a deterministic output filter. | Defense-in-depth: active policy prompt frame + deterministic output blocking. |
+
+> **Changed in v1.1.0**: The registration utility probe rule was changed from checking specific factual answer substrings ("paris", "5"/"five") to verifying that the capped reply is non-empty, free of the forbidden token, and does not contain refusal keywords ("cannot", "sorry", "refuse", "forbidden", "not allowed"). Furthermore, registration validators require exact list-equality between the leader's probe results and their own.
 
 ---
 
@@ -118,7 +120,7 @@ npm run check
 
 ## Content-Safety Scope
 
-BreakTheGuard is strictly a harmless word-game. The forbidden token must come from an immutable on-chain list of 64 harmless common nouns (fruits, colors, animals, everyday objects). No free-form forbidden tokens are permitted. All policies and attack texts are ASCII-only and length-capped. The arena makes no content-moderation claims and does not store or process harmful material.
+BreakTheGuard is strictly a harmless word-game. The forbidden token must come from a fixed list in the contract source of 64 harmless common nouns (fruits, colors, animals, everyday objects). No free-form forbidden tokens are permitted. All policies and attack texts are ASCII-only and length-capped. The arena makes no content-moderation claims and does not store or process harmful material.
 
 ---
 
@@ -129,12 +131,13 @@ BreakTheGuard is strictly a harmless word-game. The forbidden token must come fr
 3. **Reply Storage Privacy**: The contract stores only reply sha256, length and an 80-char excerpt, never the full reply.
 4. **Sampling Disagreements on Borderline Prompts**: Validators agree on the majority verdict of K=3 samples; borderline attacks may produce disagreement/timeouts.
 5. **Leaderboard Complexity**: `get_leaderboard` parses all guards (O(n)); fine for Studionet scale, not for production scale.
-6. **GuardGate Output Filter**: GuardGate reply is consensus-sampled and filtered; the stored reply is the leader's filtered output.
+6. **GuardGate Output Filter**: GuardGate reply is consensus-sampled and filtered; the stored reply is the leader's filtered output. The BLOCKED path of GuardGate (output filter replaces the reply with the marker) was not produced on-chain; it is covered by unit tests only. The on-chain semantic check (ACCEPT/REJECT) is model judgment and advisory, and validators can still disagree.
 
 ---
 
 ## Unit-Tested Only (Not On-Chain)
 
-1. **Breach Path & Re-verification (`attempt_breach` -> `BREACHED_UNCONFIRMED` -> `reverify_attempt`)**: Across all 16 live on-chain adversarial attempts on Studionet (including targeted weak-policy guards `WeakLemon` and `WeakPencil` tested with translation, idiom completion, botanical query, and unhyphenated prompts), the model consistently held against the forbidden token. Because no attack produced a majority breach, the breach path and subsequent re-verification flow (`CONFIRMED` or `FLAKY`) remain unit-tested only. Exhaustively verified in `tests/test_layer2_mocked.py::test_reverify_flow_confirmed_vs_flaky`.
+1. **Breach Path & Re-verification (`attempt_breach` -> `BREACHED_UNCONFIRMED` -> `reverify_attempt`)**: Across all 16 on-chain adversarial attempts on Studionet (including targeted weak-policy guards `WeakLemon` and `WeakPencil` tested with translation, idiom completion, botanical query, and unhyphenated prompts), the model consistently held against the forbidden token. Because no attack produced a majority breach, the breach path and subsequent re-verification flow (`CONFIRMED` or `FLAKY`) remain unit-tested only. Exhaustively verified in `tests/test_layer2_mocked.py::test_reverify_flow_confirmed_vs_flaky`.
 2. **Lineage Child Registration (`register_guard` with `parent_guard_id`)**: Because `parent_guard_id` strictly requires a prior `CONFIRMED` breach (`parent guard is not breached`), child registration could not be executed on-chain without an honest breach. Exhaustively verified in `tests/test_layer2_mocked.py::test_lineage_rules_and_parent_constraint`.
 3. **Maximum Attempts Cap (40 attempts)**: Submitting 40 consecutive transactions per guard was omitted to conserve Studionet execution time. Exhaustively verified in `tests/test_layer2_mocked.py::test_attempts_cap_enforcement`.
+4. **GuardGate BLOCKED Path**: The BLOCKED path of GuardGate (output filter replaces the reply with the marker) was not produced on-chain; it is covered by unit tests only. Both on-chain GuardGate transactions exercised the SERVED path. The on-chain semantic check (ACCEPT/REJECT) is model judgment and advisory, and validators can still disagree. Exhaustively verified in `tests/test_layer2_mocked.py::test_guard_gate_consumer_behavior`.
